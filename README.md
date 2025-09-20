@@ -1,9 +1,10 @@
-```markdown
-# Levo.ai Schema Upload & Versioning API Coding Assesment
+# Levo.ai Schema Upload & Versioning API Coding Assessment
 
-## 1. Overview
-This project is a coding exercise that implements a **Schema Upload and Versioning API** inspired by the requirements of Levo.ai.
-Features Implemented:
+## Overview
+
+This project is a coding exercise that implements a **Schema Upload and Versioning API** inspired by the requirements of Levo.ai. It is designed to mimic how schemas can be uploaded, validated, versioned, and stored for CI/CD security testing pipelines.
+
+### Features Implemented
 
 * Upload OpenAPI specs (.json / .yaml)
 * Version and persist uploaded schemas
@@ -11,11 +12,10 @@ Features Implemented:
 * Retrieve latest / specific versions of schemas
 * Get storage statistics and metadata
 
-It is designed to mimic how schemas can be uploaded, validated, versioned, and stored for CI/CD security testing pipelines.
-
 ---
 
-## 2. Features
+## Features
+
 * Upload OpenAPI spec (YAML/JSON)
 * Automatic schema validation before upload
 * Versioning of schemas per application/service
@@ -31,7 +31,8 @@ It is designed to mimic how schemas can be uploaded, validated, versioned, and s
 
 ---
 
-## 3. Tech Stack
+## Tech Stack
+
 * **Node.js + Express.js** → Backend framework
 * **MongoDB (Mongoose)** → Database for schema metadata
 * **File System (fs)** → To persist schema files
@@ -41,35 +42,34 @@ It is designed to mimic how schemas can be uploaded, validated, versioned, and s
 
 ---
 
-## 4. Project Structure
+## Project Structure
+
 ```
-
 API/
-├── bin/                \# Executables / CLI scripts
-├── controllers/        \# Route logic (upload, fetch, versioning)
-├── models/             \# Mongoose models (Schema, App, Service)
-├── routes/             \# API routes
-├── storage/            \# Persisted OpenAPI schema files
+├── bin/                # Executables / CLI scripts
+├── controllers/        # Route logic (upload, fetch, versioning)
+├── models/             # Mongoose models (Schema, App, Service)
+├── routes/             # API routes
+├── storage/            # Persisted OpenAPI schema files
 │   └── schemas/
-├── tests/              \# Jest test cases
-├── utils/              \# Helper functions (file handling, validation)
-├── server.js           \# Main entry point
-├── openapi.json        \# Example OpenAPI spec
-├── openapi.yaml        \# Example OpenAPI spec
-├── package.json        \# Dependencies & scripts
-├── .env                \# Environment variables
-└── README.md           \# Documentation
-
-````
+├── tests/              # Jest test cases
+├── utils/              # Helper functions (file handling, validation)
+├── server.js           # Main entry point
+├── openapi.json        # Example OpenAPI spec
+├── openapi.yaml        # Example OpenAPI spec
+├── package.json        # Dependencies & scripts
+├── .env                # Environment variables
+└── README.md           # Documentation
+```
 
 ---
 
-## 5. API Endpoints
+## API Endpoints
 
 **Base URL:** `http://localhost:3000/api`
 
 | Method | Endpoint | Description |
-| :--- | :--- | :--- |
+|--------|----------|-------------|
 | `POST` | `/schemas/upload` | Upload a new schema (JSON/YAML) |
 | `GET` | `/schemas/latest/:application/:service?` | Get latest schema for app/service |
 | `GET` | `/schemas/version/:application/:version/:service?` | Get schema by version |
@@ -81,21 +81,22 @@ API/
 
 ---
 
-## 6. Installation & Setup
+## Installation & Setup
 
-### a. Clone the Repository
+### Clone the Repository
+
 ```bash
-git clone [https://github.com/Sushma0204/API_Levo.ai.git](https://github.com/Sushma0204/API_Levo.ai.git)
+git clone https://github.com/Sushma0204/API_Levo.ai.git
 cd API_Levo.ai
-````
+```
 
-### b. Install Dependencies
+### Install Dependencies
 
 ```bash
 npm install
 ```
 
-### c. Configure Environment
+### Configure Environment
 
 Create a `.env` file in the root:
 
@@ -106,7 +107,7 @@ MONGODB_URI_TEST=(your unique mongodb url for testing)
 NODE_ENV=development
 ```
 
-### d. Run the Server
+### Run the Server
 
 ```bash
 npm start
@@ -114,17 +115,20 @@ npm start
 
 Server runs at: `http://localhost:3000`
 
------
+---
 
-## 7. Example Schema Upload
+## Example Schema Upload
 
 ### With levo CLI Command
 
 ```bash
 levo import --spec ./openapi.yaml --application my-app --service my-service --url http://localhost:3000
 levo test --application my-app --service my-service --url http://localhost:3000
+```
 
 Upload response:
+
+```json
 {
   "success": true,
   "message": "Schema uploaded successfully",
@@ -145,23 +149,32 @@ Upload response:
     }
   }
 }
-
 ```
------
 
-## 8. Storage & Versioning
+---
+
+## Storage & Versioning
 
 Uploaded schemas are stored under:
-`storage/schemas/<application>/<service>/schema_v<version>.json|yaml`
+```
+storage/schemas/<application>/<service>/schema_v<version>.json|yaml
+```
 
 Each upload increments the version (`v1`, `v2`, `v3`…). Previous versions are retained and retrievable.
 
------
+---
 
-## 9. Health Check
+## Health Check
 
 ```
 GET /api/health
-{"success":true,"message":"API is healthy","timestamp":"2025-09-20T07:10:24.508Z"}
 ```
------
+
+Response:
+```json
+{
+  "success": true,
+  "message": "API is healthy",
+  "timestamp": "2025-09-20T07:10:24.508Z"
+}
+```
