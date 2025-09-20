@@ -1,0 +1,102 @@
+#!/usr/bin/env node
+
+import { Command } from "commander";
+import fs from "fs";
+import path from "path";
+import axios from "axios";
+import FormData from "form-data";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const program = new Command();
+
+program
+  .name("levo")
+  .description("Simple Levo CLI (import / test)")
+  .version("0.1.0");
+
+program
+  .command("import")
+  .description("Upload a local OpenAPI spec (json|yaml) to the server")
+  .requiredOption("--spec <path>", "Path to OpenAPI JSON/YAML file")
+  .requiredOption("--application <name>", "Application name")
+  .option("--service <name>", "Service name (optional)")
+  .option("--url <url>", "Server base URL", "http://localhost:3000")
+  .action(async (opts) => {
+    const { spec, application, service, url } = opts;
+    try {
+      const filePath = path.resolve(spec);
+      if (!fs.existsSync(filePath)) {
+        console.error(`Spec file not found: ${filePath}`);
+        process.exit(2);
+      }
+      const stream = fs.createReadStream(filePath);
+      const form = new FormData();
+      form.append("spec", stream);
+      form.append("application", application);
+      if (service) form.append("service", service);
+
+      console.log(`Uploading ${filePath} → ${url}/api/schemas/upload ...`);
+      const res = await axios.post(
+        `${url.replace(/\/$/, "")}/api/schemas/upload`,
+        form,
+        {
+          headers: {
+            ...form.getHeaders(),
+          },
+          maxContentLength: Infinity,
+          maxBodyLength: Infinity,
+        }
+      );
+
+      console.log("Upload response:");
+      console.log(JSON.stringify(res.data, null, 2));
+    } catch (err) {
+      if (err.response) {
+        console.error("Server error:", err.response.status, err.response.data);
+      } else {
+        console.error("Error:", err.message);
+      }
+      process.exit(1);
+    }
+  });
+
+program
+  .command("test")
+  .description(
+    "Trigger a test run for an application/service and get back results (includes schema used)"
+  )
+  .requiredOption("--application <name>", "Application name")
+  .option("--service <name>", "Service name (optional)")
+  .option("--url <url>", "Server base URL", "http://localhost:3000")
+  .action(async (opts) => {
+    const { application, service, url } = opts;
+    try {
+      console.log(
+        `Triggering test run for application=${application} service=${
+          service || "(none)"
+        }...`
+      );
+      const res = await axios.post(
+        `${url.replace(/\/$/, "")}/api/tests/run`,
+        { application, service },
+        {
+          headers: { "Content-Type": "application/json" },
+          timeout: 120000,
+        }
+      );
+      console.log("Test run result:");
+      console.log(JSON.stringify(res.data, null, 2));
+    } catch (err) {
+      if (err.response) {
+        console.error("Server error:", err.response.status, err.response.data);
+      } else {
+        console.error("Error:", err.message);
+      }
+      process.exit(1);
+    }
+  });
+
+program.parse(process.argv);
