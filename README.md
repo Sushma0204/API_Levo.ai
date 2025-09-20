@@ -177,3 +177,51 @@ Response:
   "timestamp": "2025-09-20T07:10:24.508Z"
 }
 ```
+
+## All Applications
+
+```
+GET /api/applications
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "68ce38ebd56d30e7650c187c",
+      "name": "my-app",
+      "createdAt": "2025-09-20T05:17:31.470Z",
+      "updatedAt": "2025-09-20T05:17:31.477Z"
+    }
+  ]
+}
+```
+
+## Stats
+
+```
+GET /api/stats
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "database": {
+      "applications": 1,
+      "services": 1,
+      "schemaVersions": 4
+    },
+    "fileSystem": {
+      "totalApplications": 1,
+      "totalServices": 1,
+      "totalSchemas": 6
+    }
+  }
+}
+
+```
+
