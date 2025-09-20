@@ -66,18 +66,18 @@ API/
 
 ## API Endpoints
 
-**Base URL:** `http://localhost:3000/api`
+**Base URL:** `http://localhost:3000`
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `POST` | `/schemas/upload` | Upload a new schema (JSON/YAML) |
-| `GET` | `/schemas/latest/:application/:service?` | Get latest schema for app/service |
-| `GET` | `/schemas/version/:application/:version/:service?` | Get schema by version |
-| `GET` | `/schemas/versions/:application/:service?` | List all schema versions |
-| `GET` | `/applications` | List all applications |
-| `GET` | `/applications/:application/services` | List all services under an app |
-| `GET` | `/stats` | Show storage statistics |
-| `GET` | `/health` | API health check |
+| `POST` | `/api/schemas/upload` | Upload a new schema (JSON/YAML) |
+| `GET` | `/api/schemas/latest/:application/:service?` | Get latest schema for app/service |
+| `GET` | `/api/schemas/version/:application/:version/:service?` | Get schema by version |
+| `GET` | `/api/schemas/versions/:application/:service?` | List all schema versions |
+| `GET` | `/api/applications` | List all applications |
+| `GET` | `/api/applications/:application/services` | List all services under an app |
+| `GET` | `/api/stats` | Show storage statistics |
+| `GET` | `/api/health` | API health check |
 
 ---
 
@@ -104,7 +104,6 @@ Create a `.env` file in the root:
 PORT=3000
 MONGODB_URI=(your unique mongodb url)
 MONGODB_URI_TEST=(your unique mongodb url for testing)
-NODE_ENV=development
 ```
 
 ### Run the Server
